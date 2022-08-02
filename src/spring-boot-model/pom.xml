@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>pt.fjrcorreia.playground.spring.boot</groupId>
+        <artifactId>playground-spring-boot</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-boot-model</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>pt.fjrcorreia.playground.spring.boot</groupId>
+            <artifactId>spring-boot-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <!--
+                 USAGE:
+                 ## Create changelog from existing Database
+                 mvn liquibase:generateChangeLog
+
+                 ## Update database
+                 mvn liquibase:update
+                -->
+                <configuration>
+                    <changeLogFile>${project.basedir}/src/main/resources/migrations/migrations-master.xml</changeLogFile>
+                    <outputChangeLogFile>${project.basedir}/target/migrations-${project.version}.xml</outputChangeLogFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

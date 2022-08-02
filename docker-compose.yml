@@ -1,0 +1,92 @@
+---
+## Documentation: https://docs.docker.com/compose/compose-file/compose-file-v2/
+version: "3"
+services:
+    postgres:
+        image: mdillon/postgis:11-alpine
+        volumes:
+            - ./conf/database/init_addresses.sql:/docker-entrypoint-initdb.d/z00.init.sql:ro
+            - ./conf/database/init_keycloak.sql:/docker-entrypoint-initdb.d/z01.keycloak.init.sql:ro
+            - ./conf/database/init_postgis.sql:/docker-entrypoint-initdb.d/z91.extension.sql:ro
+        ports:
+          - 5432:5432
+        networks:
+          - development
+
+##
+## Docker Hub: https://hub.docker.com/r/jboss/keycloak/
+##
+##  DB_ADDR: Specify hostname of the database (optional)
+##  DB_PORT: Specify port of the database (optional, default is DB vendor default port)
+##  DB_DATABASE: Specify name of the database to use (optional, default is keycloak).
+##  DB_USER: Specify user to use to authenticate to the database (optional, default is keycloak).
+##  DB_PASSWORD: Specify user's password to use to authenticate to the database (optional, default is password).
+##
+## Realm Export
+## -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile
+## -Dkeycloak.migration.file=/tmp/keycloak-realm-local.json  -Dkeycloak.migration.realmName=local
+## JAVA_OPTS="$JAVA_OPTS -Dkeycloak.migration.action=export -Dkeycloak.migration.realmName=local -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/keycloak-realm-local.json.export"
+## HTTP TCPDump: sudo tcpdump -i lo0 -s 0 -A port 18080
+    keycloak:
+        image: jboss/keycloak:6.0.1
+        depends_on:
+            - postgres
+        environment:
+            ## Required Variable when behind a reverse proxy
+            ## - PROXY_ADDRESS_FORWARDING=true
+            ## - KEYCLOAK_LOGLEVEL=DEBUG
+            ## Initial authorization configuration
+            - KEYCLOAK_USER=manager
+            - KEYCLOAK_PASSWORD=admin
+            ## Database
+            - DB_VENDOR=postgres
+            - DB_USER=keycloak
+            - DB_PASSWORD=password
+            ## Importing a realm:
+            - KEYCLOAK_IMPORT=/tmp/keycloak-realm-local.json
+        volumes:
+            - ./conf/keycloak/keycloak-realm-local.json:/tmp/keycloak-realm-local.json
+        ports:
+            - 18080:8080
+            - 19990:9990
+        networks:
+            - development
+        # command: -b 0.0.0.0 -bmanagement=0.0.0.0 -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.realmName=local -Dkeycloak.migration.file=/tmp/keycloak-realm-local-export.json -Dkeycloak.migration.strategy=IGNORE_EXISTING
+        ## Make accessible to the world
+        # command: -b 0.0.0.0 -bmanagement=0.0.0.0
+
+
+    activemq:
+        image: rmohr/activemq:5.15.6-alpine
+        ports:
+            # ACTIVEMQ_TCP
+            - 61616:61616
+            # ACTIVEMQ_AMQP
+            - 5672:5672
+            # ACTIVEMQ_STOMP
+            - 61613:61613
+            # ACTIVEMQ_MQTT
+            - 1883:1883
+            # ACTIVEMQ_WS
+            - 61614:61614
+            # ACTIVEMQ_UI
+            - 8161:8161
+
+#        volumes:
+#            ## Configuration Dir
+#                                                 - ./conf/local/activemq/activemq.xml:/opt/activemq/conf/activemq.xml
+#            ## Data Dir
+#            - ./conf/local/activemq:/opt/activemq/data
+
+        networks:
+            - development
+
+    redis:
+        image: redis:6-alpine
+        ports:
+            - 6379:6379
+        command: redis-server --appendonly yes
+        networks:
+            - development
+networks:
+    development:

@@ -1,0 +1,14 @@
+
+INSERT INTO books (id, isbn, title) VALUES  (1, 'isbn1234321', 'Sample Book 1');
+INSERT INTO books (id, isbn, title) VALUES  (2, 'isbn1234323', 'Sample Book 2');
+INSERT INTO books (id, isbn, title) VALUES  (3, 'isbn1234325', 'Sample Book 3');
+
+INSERT INTO authors (id, identifier, name, email) VALUES  (101, 'miles', 'Miles Author', 'miles@sample.dom');
+INSERT INTO authors (id, identifier, name, email) VALUES  (102, 'jules', 'Jules Author', 'jules@sample.dom');
+
+INSERT INTO books_authors (book_tbl_id, authors_id) VALUES  (1, 101);
+INSERT INTO books_authors (book_tbl_id, authors_id) VALUES  (2, 102);
+INSERT INTO books_authors (book_tbl_id, authors_id) VALUES  (3, 101);
+INSERT INTO books_authors (book_tbl_id, authors_id) VALUES  (3, 102);
+
+
