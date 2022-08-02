@@ -5,12 +5,11 @@
     <parent>
         <groupId>pt.fjrcorreia.playground.spring.boot</groupId>
         <artifactId>playground-spring-boot</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>spring-boot-security</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>Spring Boot :: Security</name>
     <description>Playing with spring boot security</description>
 
@@ -26,7 +25,6 @@
         <dependency>
             <groupId>pt.fjrcorreia.playground.spring.boot</groupId>
             <artifactId>spring-boot-rest</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
 
@@ -39,11 +37,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-        </dependency-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
@@ -52,7 +45,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-
 
         <!-- Metrics -->
         <dependency>
