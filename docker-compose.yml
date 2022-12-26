@@ -28,7 +28,7 @@ services:
 ## JAVA_OPTS="$JAVA_OPTS -Dkeycloak.migration.action=export -Dkeycloak.migration.realmName=local -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/keycloak-realm-local.json.export"
 ## HTTP TCPDump: sudo tcpdump -i lo0 -s 0 -A port 18080
     keycloak:
-        image: jboss/keycloak:6.0.1
+        image: jboss/keycloak:16.1.1
         depends_on:
             - postgres
         environment:
@@ -57,7 +57,7 @@ services:
 
 
     activemq:
-        image: rmohr/activemq:5.15.6-alpine
+        image: rmohr/activemq:5.15.9-alpine
         ports:
             # ACTIVEMQ_TCP
             - 61616:61616
